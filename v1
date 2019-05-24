@@ -1,0 +1,66 @@
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root == null){
+            return true;
+        }
+        if(root.left == null && root.right == null){
+            return true;
+        }
+        if(root.left == null){
+            if(root.right.val <= root.val){
+                return false;
+            }else if(!smallest(root.right, root.val)){
+                
+                return false;
+            }else{
+                return isValidBST(root.right);
+            }
+        }
+        if(root.right == null){
+            if(root.left.val >= root.val){
+                return false;
+            }else if(!largest(root.left, root.val)){
+                return false;
+            }else{
+                return isValidBST(root.left);
+            }
+        }
+        
+        if(!largest(root.left, root.val) || !smallest(root.right, root.val)){
+            return false;
+        }
+        if((root.left.val >= root.val) || (root.right.val <= root.val)){
+            return false;
+        }else{
+            return (isValidBST(root.left) && isValidBST(root.right));
+        }
+    }
+    
+    //Used for left node
+    public boolean largest(TreeNode root, int large){
+        if(root == null){
+            return true;
+        }
+        if(root.val >= large){
+            return false;
+        }
+        if(root.right == null && root.left == null){
+            return true;
+        }
+        return largest(root.left, large) && largest(root.right, large);
+    }
+    
+    //Used for right node
+    public boolean smallest(TreeNode root, int small){
+        if(root == null){
+            return true;
+        }
+        if(root.val <= small){
+            return false;
+        }
+        if(root.right == null && root.left == null){
+            return true;
+        }
+        return smallest(root.left, small) && smallest(root.right, small);
+    }
+}
